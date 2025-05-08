@@ -3,3 +3,10 @@ lista de requirements:
 
 - fastapi
 - uvicorn
+
+
+pra iniciar server local (back):
+
+1 - vai pro rep de back /back
+2 - source venv/bin/activate
+3 - uvicorn main:app --reload
