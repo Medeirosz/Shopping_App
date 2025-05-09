@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -18,7 +18,7 @@
         <li><a href="#" class="hover:text-blue-600">Sobre</a></li>
         <li>
           <a href="#">
-            <img src="/back/static/logo.png" alt="Logo do site" class="h-7 w-auto">
+            <img src="/static/logo.png" alt="Logo do site" class="h-7 w-auto">
           </a>
         </li>
       </ul>
@@ -31,15 +31,24 @@
     <p class="text-gray-600 mb-6">Aqui vai o conteúdo do site, com espaço para cards, textos, imagens etc.</p>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div class="bg-white shadow p-4 rounded">Card 1</div>
+      {% for produto in produtos %}
+
+      <div class="big-white shadow p-4 rounded">
+        {{ produto.nome }} - R$ {{ produto.preco }}
+      </div>
+
+      {% endfor %}
+      <!-- <div class="bg-white shadow p-4 rounded">Card 1</div>
       <div class="bg-white shadow p-4 rounded">Card 2</div>
       <div class="bg-white shadow p-4 rounded">Card 3</div>
       <div class="bg-white shadow p-4 rounded">Card 4</div>
       <div class="bg-white shadow p-4 rounded">Card 5</div>
-      <div class="bg-white shadow p-4 rounded">Card 6</div>
+      <div class="bg-white shadow p-4 rounded">Card 6</div> -->
+
+
     </div>
   </main>
 
-  <script src="script.js"></script>
+  <script src="/static/script.js"></script>
 </body>
 </html>
