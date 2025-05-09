@@ -6,15 +6,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# CORS (pode ser removido se front estiver 100% dentro do back)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5500"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 # Arquivos estáticos (css, js, imagens)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -27,22 +18,14 @@ def home(request: Request):
 
     produtos = [
         {"nome": "Teclado", "preco": 299.99},
-        {"nome": "Mouse", "preco": 199.999}
+        {"nome": "Mouse", "preco": 199.999},
+        {"nome": "Oculos Preto de Sol", "preco": 12.99},
+        {"nome": "Teclado", "preco": 299.99},
+        {"nome": "Mouse", "preco": 199.999},
+        {"nome": "Oculos Preto de Sol", "preco": 12.99}
     ]
 
     return templates.TemplateResponse("index.html", {
     "request": request,
     "produtos": produtos
 })
-
-
-
-# @app.get("/produtos", response_class=HTMLResponse)
-# def produtos(request: Request):
-
-#     produtos = [
-#         {"nome": "Camiseta", "preco": 89.90},
-#         {"nome": "Tênis", "preco": 219.99},
-#     ]
-
-#     return produtos
