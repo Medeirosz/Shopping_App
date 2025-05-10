@@ -1,0 +1,110 @@
+  <!DOCTYPE html>
+  <html lang="pt-BR">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
+      <title>Shopping-App</title>
+
+      <!-- Tailwind CSS -->
+      <script src="https://cdn.tailwindcss.com"></script>
+
+      <!-- Background animado (Vanta.js + Three.js) -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+    </head>
+
+    <body class="min-h-screen flex flex-col bg-gray-100">
+      <!-- Fundo animado -->
+      <div id="vanta-bg" class="fixed inset-0 -z-10"></div>
+
+      <!-- Header -->
+      <header class="sticky top-0 z-50 bg-white shadow-md p-4">
+        <nav class="flex items-center justify-between w-full px-6">
+          <!-- Logo e título -->
+          <ul class="flex items-center gap-4 text-gray-700 font-medium">
+            <li>
+              <a href="#">
+                <img src="/static/profile.png" alt="Logo" class="h-7 w-auto" />
+              </a>
+            </li>
+            <li>
+              <h1 class="text-xl font-bold">Shopping-App</h1>
+            </li>
+          </ul>
+
+          <!-- Menu -->
+          <ul class="flex items-center gap-5 text-gray-700 font-medium">
+            <li><a href="#" class="hover:text-blue-600">Home</a></li>
+            <li><a href="#" class="hover:text-blue-600">Sobre</a></li>
+            <li>
+              <button onclick="toggleForm()" class="text-blue-600 hover:text-blue-800 font-semibold">+ Adicionar Produto</button>
+            </li>
+            <li>
+              <img src="/static/logo.png" alt="Carrinho" class="h-7 w-auto" />
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      <!-- Hero -->
+      <section class="relative h-[400px] w-[60%] mx-auto flex items-center justify-center mt-20">
+        <div class="bg-white/10 backdrop-blur-md rounded-xl px-8 py-6 text-center shadow-lg">
+          <h2 class="text-4xl md:text-6xl font-bold text-white">Bem-vindo ao Shopping-App</h2>
+          <p class="mt-4 text-white/70 text-lg">A experiência de compra que você merece</p>
+          <a href="#produtos" class="mt-6 inline-block px-6 py-3 bg-white/20 text-white rounded-full hover:bg-white/30 transition duration-300">Ver Produtos</a>
+        </div>
+      </section>
+
+      <!-- Conteúdo principal -->
+      <main class="w-full p-6 bg-white/5 backdrop-blur-sm flex-1">
+        <h2 class="text-2xl text-white font-semibold mb-4">Conteúdo principal</h2>
+        <p class="text-gray-600 mb-6">Aqui vai o conteúdo do site, com espaço para cards, textos, imagens etc.</p>
+
+        <div id="form-produto" class="hidden mb-8 bg-white p-4 rounded shadow max-w-md">
+          <form method="post" action="/produtos">
+            <h2 class="text-xl font-semibold mb-2">Adicionar Produto</h2>
+            <label class="block mb-2">
+              Nome:
+              <input type="text" name="nome" required class="w-full p-2 border rounded mt-1" />
+            </label>
+            <label class="block mb-4">
+              Preço:
+              <input type="number" step="0.01" name="preco" required class="w-full p-2 border rounded mt-1" />
+            </label>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Adicionar</button>
+          </form>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {% for produto in produtos %}
+          <div class="bg-white shadow p-4 rounded">
+            {{ produto.nome }} - R$ {{ produto.preco }}
+          </div>
+          {% endfor %}
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="bg-white text-gray-600 p-4 mt-auto border-t">
+        <div class="max-w-6xl mx-auto flex justify-between items-center text-sm">
+          <p>&copy; 2025 Shopping-App. Todos os direitos reservados.</p>
+          <div class="flex gap-4">
+            <a href="#" class="hover:text-blue-600">Privacidade</a>
+            <a href="#" class="hover:text-blue-600">Termos</a>
+            <a href="#" class="hover:text-blue-600">Contato</a>
+          </div>
+        </div>
+      </footer>
+
+      <!-- Script simples para toggle -->
+      <script>
+        function toggleForm() {
+          const form = document.getElementById('form-produto');
+          form.classList.toggle('hidden');
+        }
+      </script>
+
+      <script src="static/script.js"></script>
+    </body>
+  </html>

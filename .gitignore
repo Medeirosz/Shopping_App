@@ -1,0 +1,23 @@
+# Ambientes virtuais
+venv/
+.env
+
+# Arquivos Python cache
+__pycache__/
+*.py[cod]
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Banco de dados local
+*.sqlite3
+*.db
+
+# Configs do VSCode e IDEs
+.vscode/
+.idea/
+
+# Outros
+__MACOSX/
+*.log
