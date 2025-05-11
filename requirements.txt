@@ -1,17 +1,23 @@
 fastapi==0.110.0
-uvicorn==0.27.1
+uvicorn==0.34.2
 jinja2==3.1.3
+python_version == "3.13.3"
 
-# Instruções para iniciar o servidor local (backend):
 
-# 1 - Vá até o diretório do backend:
-#     cd backend
+# Instruções para iniciar o servidor local:
 
-# 2 - Ative o ambiente virtual:
+# 1 - Navegue até o diretório do projeto
+#     cd Shopping-App
+
+# 2 - Ative o ambiente virtual (opcional mas RECOMENDADO):
 #     source venv/bin/activate  (Linux/macOS)
 #     venv\Scripts\activate     (Windows)
 
-# 3 - Inicie o servidor FastAPI:
+# 3 - Instale as dependências:
+#     pip install -r requirements.txt
+
+# 4 - Inicie o servidor:
 #     uvicorn main:app --reload
 
-
+# Requisitos:
+# - Python 3.13.3 instalado
