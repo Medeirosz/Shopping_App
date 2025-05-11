@@ -80,23 +80,33 @@
         </form>
       </div>
 
-      <!-- Cards dos produtos -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for produto in produtos %}
-        <div class="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-xl text-white flex flex-col items-center transition-transform transform hover:scale-105">
-          <img src="{{ produto.imagem_url or '/static/produto.jpg' }}" alt="{{ produto.nome }}"
-               class="h-32 w-32 object-contain rounded-xl mb-4 shadow" />
-          <h3 class="text-xl font-semibold">{{ produto.nome }}</h3>
-          <p class="text-blue-400 text-lg font-medium mt-2">R$ {{ produto.preco }}</p>
-          <form method="post" action="/carrinho/adicionar" class="mt-4 w-full">
-            <input type="hidden" name="produto_id" value="{{ produto.id }}">
-            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl font-semibold transition duration-300">
-              Adicionar ao Carrinho
-            </button>
-          </form>
+<!-- Cards dos produtos -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for produto in produtos %}
+    <div class="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-xl text-white flex flex-col items-center transition-transform transform hover:scale-105">
+        <img src="{{ produto.imagem_url or '/static/produto.jpg' }}" alt="{{ produto.nome }}"
+             class="h-32 w-32 object-contain rounded-xl mb-4 shadow" />
+        <h3 class="text-xl font-semibold">{{ produto.nome }}</h3>
+        <p class="text-blue-400 text-lg font-medium mt-2">R$ {{ produto.preco }}</p>
+        
+        <div class="flex gap-2 w-full mt-4">
+            <form method="post" action="/carrinho/adicionar" class="flex-1">
+                <input type="hidden" name="produto_id" value="{{ produto.id }}">
+                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl font-semibold transition duration-300">
+                    Adicionar
+                </button>
+            </form>
+            
+            <form method="post" action="/produtos/{{ produto.id }}/remover" class="flex-1"
+                  onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
+                <button type="submit" class="w-full bg-blue-800 hover:bg-blue-900 text-white py-2 rounded-xl font-semibold transition duration-300">
+                    Excluir
+                </button>
+            </form>
         </div>
-        {% endfor %}
-      </div>
+    </div>
+    {% endfor %}
+</div>
     </main>
 
     <!-- Footer -->
