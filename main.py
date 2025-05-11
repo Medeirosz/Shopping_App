@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from models import Produto
 from starlette.middleware.sessions import SessionMiddleware
+from starlette.status import HTTP_303_SEE_OTHER
 
 app = FastAPI()
 app.add_middleware(SessionMiddleware, secret_key="tVKo}XRfsfR(dsJ,s?4)Oezrj`3AH[")
@@ -33,9 +34,13 @@ def get_db():
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request, db: Session = Depends(get_db)):
     produtos = db.query(Produto).all()
+    usuario = request.session.get("usuario")
+    tipo = request.session.get("tipo")
     return templates.TemplateResponse("index.html", {
         "request": request,
-        "produtos": produtos
+        "produtos": produtos,
+        "usuario": usuario,
+        "tipo": tipo
     })
 
 # Adicionar produto
@@ -50,14 +55,48 @@ def adicionar_produto(
     db.commit()
     return RedirectResponse(url="/", status_code=303)
 
-
+# Remover porduto
 @app.post("/produtos/{produto_id}/remover")
 def remover_produto(
     produto_id: int = Path(...),
     db: Session = Depends(get_db)
 ):
     produto = db.query(Produto).filter(Produto.id == produto_id).first()
-    if produto:
+    if produto: 
         db.delete(produto)
         db.commit()
     return RedirectResponse(url="/", status_code=303)
+
+# Página de login
+@app.get("/login")
+def show_login(request: Request):
+    # Se já estiver logado, redireciona direto
+    if request.session.get("usuario") == "adm":
+        return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)
+    return templates.TemplateResponse("login.html", {"request": request})
+
+# Processa o login
+@app.post("/login")
+def login(request: Request, username: str = Form(...), password: str = Form(...)):
+    # Dicionário de usuários simples
+    usuarios = {
+        "adm": {"senha": "123", "tipo": "admin"},
+        "cliente": {"senha": "123", "tipo": "cliente"},
+    }
+
+    usuario = usuarios.get(username)
+    if usuario and usuario["senha"] == password:
+        request.session["usuario"] = username
+        request.session["tipo"] = usuario["tipo"]
+        return RedirectResponse(url="/", status_code=303)
+
+    return templates.TemplateResponse("login.html", {
+        "request": request,
+        "error": "Credenciais inválidas"
+    })
+
+# Logout
+@app.get("/logout")
+def logout(request: Request):
+    request.session.clear()
+    return RedirectResponse(url="/login", status_code=HTTP_303_SEE_OTHER)
