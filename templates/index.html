@@ -145,12 +145,15 @@
                       </button>
                   </form>
                   
-                  <form method="post" action="/produtos/{{ produto.id }}/remover" class="flex-1"
-                        onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
-                      <button type="submit" class="w-full bg-blue-800 hover:bg-blue-900 text-white py-2 rounded-xl font-semibold transition duration-300">
-                          Excluir
-                      </button>
-                  </form>
+
+                  {% if tipo == "admin" %}
+                    <form method="post" action="/produtos/{{ produto.id }}/remover" class="flex-1"
+                          onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
+                        <button type="submit" class="w-full bg-blue-800 hover:bg-blue-900 text-white py-2 rounded-xl font-semibold transition duration-300">
+                            Excluir
+                        </button>
+                    </form>
+                  {% endif %}
               </div>
           </div>
           {% endfor %}
