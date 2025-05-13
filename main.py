@@ -12,7 +12,6 @@ from starlette.status import HTTP_303_SEE_OTHER
 app = FastAPI()
 app.add_middleware(SessionMiddleware, secret_key="tVKo}XRfsfR(dsJ,s?4)Oezrj`3AH[")
 
-
 # Cria as tabelas no banco (se não existirem ainda)
 Base.metadata.create_all(bind=engine)
 
@@ -99,4 +98,15 @@ def login(request: Request, username: str = Form(...), password: str = Form(...)
 @app.get("/logout")
 def logout(request: Request):
     request.session.clear()
-    return RedirectResponse(url="/login", status_code=HTTP_303_SEE_OTHER)
+    return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)
+
+@app.get("/profile", response_class=HTMLResponse)
+def perfil(request: Request):
+    usuario = request.session.get("usuario")
+    tipo = request.session.get("tipo") 
+
+    return templates.TemplateResponse("profile.html", {
+        "request": request,
+        "usuario": usuario,
+        "tipo": tipo or "usuário"
+    })

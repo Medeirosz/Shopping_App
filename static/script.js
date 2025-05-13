@@ -1,4 +1,4 @@
-// Fundo animado com Vanta.js
+// // Fundo animado com Vanta.js
 VANTA.NET({
   el: "#vanta-bg",
   mouseControls: false,
@@ -27,15 +27,15 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// document.addEventListener("DOMContentLoaded", () => {
-//   const toggleButton = document.querySelector("button[data-toggle='form-produto']");
-//   const formProduto = document.getElementById("form-produto");
+function toggleDropdown() {
+  const dropdown = document.getElementById("dropdown");
+  dropdown.classList.toggle("hidden");
+}
 
-//   if (toggleButton && formProduto) {
-//     toggleButton.addEventListener("click", () => {
-//       formProduto.classList.toggle("hidden");
-//     });
-//   } else {
-//     console.warn("Botão ou formulário não encontrado para toggle.");
-//   }
-// });
+// fecha dropdown se clicar fora
+window.addEventListener("click", function(e) {
+  const dropdown = document.getElementById("dropdown");
+  if (!e.target.closest(".relative")) {
+    dropdown.classList.add("hidden");
+  }
+});
