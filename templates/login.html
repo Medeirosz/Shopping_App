@@ -1,56 +1,71 @@
 <!-- PAGINA DE LOGIN DO USUARIO / ADM -->
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
-        <link rel="stylesheet" href="../static/index.css">
-        <title>Login</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../static/index.css" />
+    <title>Login</title>
 
-        <!-- Tailwind CSS -->
-        <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-        <!-- Background animado (Vanta.js + Three.js) -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
-    </head>
-    
-    <body class="min-h-screen flex items-center justify-center bg-gray-900">
+    <!-- Background animado (Vanta.js + Three.js) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+  </head>
 
-        <!-- Fundo animado -->
-        <div id="vanta-bg" class="fixed inset-0 -z-10"></div>
+  <body class="min-h-screen flex flex-col bg-gray-900 text-white">
+    <!-- Fundo animado -->
+    <div id="vanta-bg" class="fixed inset-0 -z-10"></div>
 
-        <div class="bg-white p-8 rounded shadow-md w-full max-w-sm">
-            <h1 class="text-white text-center text-3xl mb-6 bg-gray-400 p-2 rounded">Login</h1>
-            <form action="/login" method="post" style="display: flex; flex-direction: column; gap: 12px;">
-                <label>Usuário:</label>
-                <input type="text" name="username" required>
-                
-                <label>Senha:</label>
-                <input type="password" name="password" required>
-                
-                <button type="submit" style="background: green; color: white; padding: 8px; border: none;">
-                    Entrar
-                </button>
-            </form>
+    <!-- Conteúdo central -->
+    <main class="flex-1 flex items-center justify-center">
+      <div class="bg-white text-black p-8 rounded-lg shadow-lg w-full max-w-sm">
+        <h1 class="text-center text-2xl font-semibold bg-gray-400 p-2 rounded">Login</h1>
+        <form action="/login" method="post" class="mt-6 flex flex-col gap-4">
+          <div>
+            <label class="block text-sm font-medium">Usuário:</label>
+            <input
+              type="text"
+              name="username"
+              required
+              class="w-full mt-1 p-2 rounded bg-blue-100 border border-gray-300"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Senha:</label>
+            <input
+              type="password"
+              name="password"
+              required
+              class="w-full mt-1 p-2 rounded bg-blue-100 border border-gray-300"
+            />
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded font-semibold"
+          >
+            Entrar
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white/10 backdrop-blur-md text-white p-4 border-t border-white/10 w-full">
+      <div class="max-w-6xl mx-auto flex justify-between items-center text-sm">
+        <p>&copy; 2025 Shopping-App. Todos os direitos reservados.</p>
+        <div class="flex gap-4">
+          <a href="#" class="hover:text-blue-400">Privacidade</a>
+          <a href="#" class="hover:text-blue-400">Termos</a>
+          <a href="#" class="hover:text-blue-400">Contato</a>
         </div>
+      </div>
+    </footer>
 
-        <!-- Footer -->
-        <footer class="bg-white/10 backdrop-blur-md text-white p-4 mt-auto border-t border-white/10">
-            <div class="max-w-6xl mx-auto flex justify-between items-center text-sm">
-            <p>&copy; 2025 Shopping-App. Todos os direitos reservados.</p>
-            <div class="flex gap-4">
-                <a href="#" class="hover:text-blue-400">Privacidade</a>
-                <a href="#" class="hover:text-blue-400">Termos</a>
-                <a href="#" class="hover:text-blue-400">Contato</a>
-            </div>
-            </div>
-        </footer>
-  
-
-        <!-- Script externo -->
-        <script src="static/script.js"></script>
-
-    </body>
+    <!-- Script externo -->
+    <script src="static/script.js"></script>
+  </body>
 </html>

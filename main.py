@@ -54,7 +54,7 @@ def adicionar_produto(
     db.commit()
     return RedirectResponse(url="/", status_code=303)
 
-# Remover porduto
+# Remover produto
 @app.post("/produtos/{produto_id}/remover")
 def remover_produto(
     produto_id: int = Path(...),
@@ -106,6 +106,19 @@ def perfil(request: Request):
     tipo = request.session.get("tipo") 
 
     return templates.TemplateResponse("profile.html", {
+        "request": request,
+        "usuario": usuario,
+        "tipo": tipo or "usuário"
+    })
+
+
+# Página de about
+@app.get("/about", response_class=HTMLResponse)
+def about(request: Request):
+    usuario = request.session.get("usuario")
+    tipo = request.session.get("tipo")
+    
+    return templates.TemplateResponse("about.html", {
         "request": request,
         "usuario": usuario,
         "tipo": tipo or "usuário"

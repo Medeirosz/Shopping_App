@@ -24,10 +24,19 @@
             <nav class="flex items-center justify-between w-full px-6">
       
               <!-- Logo e título -->
-              <ul class="flex items-center gap-3 font-medium text-white">
+              <ul class="flex items-center gap-4 font-medium text-white">
                 <li>
-                  {% if usuario %}
-                    <!-- nada -->
+                    {% if usuario %}
+                    <div class="relative inline-block text-center">
+                      <button onclick="toggleDropdown()" class=" text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                        <img src="/static/profile.png" alt="profile" class="h-7 w-auto" />
+                      </button>
+                    
+                      <div id="dropdown" class="fixed left-0 hidden mt-4 w-[8rem] bg-white backdrop-blur-md shadow-md z-50">
+                        <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Perfil</a>
+                        <a href="/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-100">Sair</a>
+                      </div>
+                    </div>
                   {% else %}
                     <a href="/login" class="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-700 transition">
                       Login
@@ -40,7 +49,7 @@
               </ul>
       
               <!-- Menu -->
-              <ul class="flex items-center min-h-[3rem] gap-4 text-white">
+              <ul class="flex items-center gap-5 font-medium text-white">
                 <li><a href="/" class="hover:text-blue-400">Home</a></li>
                 <li><a href="/about" class="hover:text-blue-400">Sobre</a></li>
                 <li>
@@ -52,25 +61,7 @@
             </nav>
         </header>
 
-        <section class="flex flex-col items-center justify-start min-h-[80vh] w-full pt-16">
-            <!-- Imagem maior e com fundo cinza arredondado -->
-            <div class="w-[80%] flex justify-center">
-              <div class="w-40 h-40 rounded-full bg-gray-700 flex items-center justify-center shadow-lg">
-                <img src="/static/profile.png" alt="profile image" class="w-28 h-28 object-cover rounded-full" />
-              </div>
-            </div>
-          
-            <!-- Corpo da página com fundo translúcido -->
-            <div class="w-[60%] mt-6 bg-white/10 backdrop-blur-md rounded-xl px-10 py-12 text-center shadow-xl">
-              <h2 class="text-4xl md:text-2xl font-bold text-white">Seu Perfil:</h2>
-            <div>
-
-            <div class="w-[80%] mt-6 rounded-xl px-10 py-12 text-left">
-                <p class="mt-4 text-white text-2xl">Seus dados:</p>
-                <p class="mt-4 text-white/70 text-lg">Usuario: {{ usuario }}</p>
-                <p class="mt-4 text-white/70 text-lg">Tipo de Usuario: {{ tipo }}</p>
-            </div>
-        </section>
+        <!--  -->
 
         <section>
             <div class="h-40"></div>
