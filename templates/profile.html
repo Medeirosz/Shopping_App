@@ -20,15 +20,13 @@
         <!-- Fundo animado -->
         <div id="vanta-bg" class="fixed inset-0 -z-10"></div>
 
-        <header class="sticky top-0 z-50 bg-white/10 backdrop-blur-md p-4 shadow-lg">
+        <header class="sticky top-0 z-50 bg-white/10 backdrop-blur-md p-[.85rem] shadow-lg">
             <nav class="flex items-center justify-between w-full px-6">
       
               <!-- Logo e título -->
               <ul class="flex items-center gap-3 font-medium text-white">
                 <li>
-                  {% if usuario %}
-                    <!-- nada -->
-                  {% else %}
+                  {% if not usuario %}
                     <a href="/login" class="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-700 transition">
                       Login
                     </a>
@@ -44,7 +42,7 @@
                 <li><a href="/" class="hover:text-blue-400">Home</a></li>
                 <li><a href="/about" class="hover:text-blue-400">Sobre</a></li>
                 <li>
-                  <a href="#" class="relative group h-7 w-7 block">
+                  <a href="#" class="relative group h-7.5 w-7 block">
                     <img src="/static/logo.png" alt="Carrinho" class="hover:text-blue-400 h-7 w-auto filter invert brightness-200 transition duration-300 group-hover:invert-0 group-hover:brightness-100" />
                   </a>
                 </li>
