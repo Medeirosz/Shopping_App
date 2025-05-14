@@ -14,28 +14,3 @@ VANTA.NET({
   maxDistance: 1.0,
   spacing: 20.0
 });
-
-// Ativa o toggle do formulário
-window.addEventListener("DOMContentLoaded", () => {
-  const toggleBtn = document.querySelector("button[data-toggle='form-produto']");
-  const form = document.getElementById("form-produto");
-
-  if (toggleBtn && form) {
-    toggleBtn.addEventListener("click", () => {
-      form.classList.toggle("hidden");
-    });
-  }
-});
-
-function toggleDropdown() {
-  const dropdown = document.getElementById("dropdown");
-  dropdown.classList.toggle("hidden");
-}
-
-// fecha dropdown se clicar fora
-window.addEventListener("click", function(e) {
-  const dropdown = document.getElementById("dropdown");
-  if (!e.target.closest(".relative")) {
-    dropdown.classList.add("hidden");
-  }
-});

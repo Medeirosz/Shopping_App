@@ -3,25 +3,27 @@ from fastapi import FastAPI, Request, Form, Depends, Path
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-from models import Produto
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.status import HTTP_303_SEE_OTHER
+from models import Produto, CartItem
 
 app = FastAPI()
-app.add_middleware(SessionMiddleware, secret_key="tVKo}XRfsfR(dsJ,s?4)Oezrj`3AH[")
+app.add_middleware(
+    SessionMiddleware,
+    secret_key="tVKo}XRfsfR(dsJ,s?4)Oezrj`3AH["
+)
 
-# Cria as tabelas no banco (se não existirem ainda)
+# Cria as tabelas se não existirem
 Base.metadata.create_all(bind=engine)
 
-# Arquivos estáticos (css, js, imagens)
+# Monta arquivos estáticos
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Templates HTML
+# Configura templates
 templates = Jinja2Templates(directory="templates")
 
-# Dependência para obter sessão do banco
+# Dependência para sessão do DB
 def get_db():
     db = SessionLocal()
     try:
@@ -29,97 +31,130 @@ def get_db():
     finally:
         db.close()
 
-# Página inicial
+
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request, db: Session = Depends(get_db)):
+    # Lista de produtos
     produtos = db.query(Produto).all()
+
+    # Dados de sessão
     usuario = request.session.get("usuario")
     tipo = request.session.get("tipo")
+
+    # TODO: substituir fallback por user_id real
+    user_id = 1
+    carrinho = db.query(CartItem).filter(CartItem.user_id == user_id).all()
+
     return templates.TemplateResponse("index.html", {
         "request": request,
         "produtos": produtos,
         "usuario": usuario,
-        "tipo": tipo
+        "tipo": tipo,
+        "carrinho": carrinho
     })
 
-# Adicionar produto
+
 @app.post("/produtos")
 def adicionar_produto(
     nome: str = Form(...),
     preco: float = Form(...),
     db: Session = Depends(get_db)
 ):
-    novo_produto = Produto(nome=nome, preco=preco)
-    db.add(novo_produto)
+    novo = Produto(nome=nome, preco=preco)
+    db.add(novo)
     db.commit()
-    return RedirectResponse(url="/", status_code=303)
+    return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)
 
-# Remover produto
+
 @app.post("/produtos/{produto_id}/remover")
 def remover_produto(
     produto_id: int = Path(...),
     db: Session = Depends(get_db)
 ):
     produto = db.query(Produto).filter(Produto.id == produto_id).first()
-    if produto: 
+    if produto:
         db.delete(produto)
         db.commit()
-    return RedirectResponse(url="/", status_code=303)
+    return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)
 
-# Página de login
-@app.get("/login")
+
+@app.get("/login", response_class=HTMLResponse)
 def show_login(request: Request):
-    # Se já estiver logado, redireciona direto
     if request.session.get("usuario") == "adm":
         return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)
     return templates.TemplateResponse("login.html", {"request": request})
 
-# Processa o login
+
 @app.post("/login")
-def login(request: Request, username: str = Form(...), password: str = Form(...)):
-    # Dicionário de usuários simples
+def login(
+    request: Request,
+    username: str = Form(...),
+    password: str = Form(...)
+):
     usuarios = {
-        "adm": {"senha": "123", "tipo": "admin"},
+        "adm":     {"senha": "123", "tipo": "admin"},
         "cliente": {"senha": "123", "tipo": "cliente"},
     }
-
-    usuario = usuarios.get(username)
-    if usuario and usuario["senha"] == password:
+    user = usuarios.get(username)
+    if user and user["senha"] == password:
         request.session["usuario"] = username
-        request.session["tipo"] = usuario["tipo"]
-        return RedirectResponse(url="/", status_code=303)
+        request.session["tipo"]    = user["tipo"]
+        return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)
 
     return templates.TemplateResponse("login.html", {
         "request": request,
         "error": "Credenciais inválidas"
     })
 
-# Logout
+
 @app.get("/logout")
 def logout(request: Request):
     request.session.clear()
     return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)
 
+
 @app.get("/profile", response_class=HTMLResponse)
 def perfil(request: Request):
-    usuario = request.session.get("usuario")
-    tipo = request.session.get("tipo") 
-
     return templates.TemplateResponse("profile.html", {
         "request": request,
-        "usuario": usuario,
-        "tipo": tipo or "usuário"
+        "usuario": request.session.get("usuario"),
+        "tipo":    request.session.get("tipo") or "usuário"
     })
 
 
-# Página de about
 @app.get("/about", response_class=HTMLResponse)
 def about(request: Request):
-    usuario = request.session.get("usuario")
-    tipo = request.session.get("tipo")
-    
     return templates.TemplateResponse("about.html", {
         "request": request,
-        "usuario": usuario,
-        "tipo": tipo or "usuário"
+        "usuario": request.session.get("usuario"),
+        "tipo":    request.session.get("tipo") or "usuário"
     })
+
+
+@app.post("/carrinho/adicionar")
+def add_to_cart(
+    request: Request,
+    produto_id: int = Form(...),
+    db: Session = Depends(get_db)
+):
+    produto = db.query(Produto).get(produto_id)
+    if produto:
+        # TODO: usar user_id real em vez de 1
+        user_id = 1
+        item = CartItem(
+            user_id=user_id,
+            nome=produto.nome,
+            preco=produto.preco
+        )
+        db.add(item)
+        db.commit()
+    return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)
+
+
+@app.post("/carrinho/limpar")
+def clear_cart(request: Request, db: Session = Depends(get_db)):
+    # TODO: usar user_id real em vez de 1
+    user_id = 1
+    db.query(CartItem).filter(CartItem.user_id == user_id).delete()
+    db.commit()
+    return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)

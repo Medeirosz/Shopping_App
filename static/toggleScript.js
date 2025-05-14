@@ -1,28 +1,43 @@
-// Abre o dropdown do perfil do header
-function toggleDropdown() {
-    const dropdown = document.getElementById("dropdown");
-    dropdown.classList.toggle("hidden");
-  }
-
-// Fecha dropdown se clicar fora
-window.addEventListener("click", function(e) {
-  const dropdown = document.getElementById("dropdown");
-  if (!e.target.closest(".relative")) {
-    dropdown.classList.add("hidden");
-  }
-});
-
-
-// Abre o dropdown do addprodutos do header
-function toggleProdutoDropdown() {
-  const formDropdown = document.getElementById("form-produto");
-  formDropdown.classList.toggle("hidden");
+// abre/fecha perfil
+function toggleProfileDropdown(e) {
+  e.stopPropagation();
+  document.getElementById("profile-dropdown").classList.toggle("hidden");
 }
 
-// Fecha dropdown se clicar fora
-window.addEventListener("click", function(e) {
-  const formDropdown = document.getElementById("form-produto");
-  if (!e.target.closest(".relative") && !formDropdown.classList.contains("hidden")) {
-    formDropdown.classList.add("hidden");
+// abre/fecha produto
+function toggleProductDropdown(e) {
+  e.stopPropagation();
+  document.getElementById("product-dropdown").classList.toggle("hidden");
+}
+
+// abre/fecha carrinho
+function toggleCarrinhoDropdown(e) {
+  e.stopPropagation();
+  document.getElementById("carrinho-dropdown").classList.toggle("hidden");
+}
+
+// fecha tudo ao clicar fora
+function closeAll(e) {
+  if (!e.target.closest(".dropdown-container")) {
+    ["profile-dropdown","product-dropdown","carrinho-dropdown"]
+      .forEach(id => {
+        const el = document.getElementById(id);
+        if (el && !el.classList.contains("hidden")) {
+          el.classList.add("hidden");
+        }
+      });
   }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("profile-button")
+          .addEventListener("click", toggleProfileDropdown);
+
+  document.getElementById("product-button")
+          .addEventListener("click", toggleProductDropdown);
+
+  document.getElementById("carrinho-button")
+          .addEventListener("click", toggleCarrinhoDropdown);
+
+  window.addEventListener("click", closeAll);
 });
