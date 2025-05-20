@@ -114,22 +114,28 @@ def logout(request: Request):
 
 
 @app.get("/profile", response_class=HTMLResponse)
-def perfil(request: Request):
+def perfil(request: Request, db: Session = Depends(get_db)):
+    user_id = 1
+    carrinho = db.query(CartItem).filter(CartItem.user_id == user_id).all()
+
     return templates.TemplateResponse("profile.html", {
         "request": request,
         "usuario": request.session.get("usuario"),
-        "tipo":    request.session.get("tipo") or "usuário"
+        "tipo":    request.session.get("tipo") or "usuário",
+        "carrinho": carrinho
     })
 
-
 @app.get("/about", response_class=HTMLResponse)
-def about(request: Request):
+def perfil(request: Request, db: Session = Depends(get_db)):
+    user_id = 1
+    carrinho = db.query(CartItem).filter(CartItem.user_id == user_id).all()
+
     return templates.TemplateResponse("about.html", {
         "request": request,
         "usuario": request.session.get("usuario"),
-        "tipo":    request.session.get("tipo") or "usuário"
-    })
-
+        "tipo":    request.session.get("tipo") or "usuário",
+        "carrinho": carrinho
+    })  
 
 @app.post("/carrinho/adicionar")
 def add_to_cart(
@@ -150,11 +156,34 @@ def add_to_cart(
         db.commit()
     return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)
 
-
+# remove todo carrinho
 @app.post("/carrinho/limpar")
 def clear_cart(request: Request, db: Session = Depends(get_db)):
-    # TODO: usar user_id real em vez de 1
     user_id = 1
     db.query(CartItem).filter(CartItem.user_id == user_id).delete()
     db.commit()
+    return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)
+
+# remove apenas o item desejado
+@app.post("/carrinho/remover/{item_id}")
+def remover_item_carrinho(item_id: int, db: Session = Depends(get_db)):
+    item = db.query(CartItem).filter(CartItem.id == item_id).first()
+    if item:
+        db.delete(item)
+        db.commit()
+    return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)
+
+# salva os produtos editados
+@app.post("/produtos/{produto_id}/editar")
+def editar_produto(
+    produto_id: int = Path(...),
+    nome: str = Form(...),
+    preco: float = Form(...),
+    db: Session = Depends(get_db)
+):
+    produto = db.query(Produto).filter(Produto.id == produto_id).first()
+    if produto:
+        produto.nome = nome
+        produto.preco = preco
+        db.commit()
     return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)

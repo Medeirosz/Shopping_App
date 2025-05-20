@@ -1,239 +1,271 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="../static/index.css">
-    <title>Shopping-App</title>
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
+	<link rel="stylesheet" href="../static/index.css">
+	<title>Shopping-App</title>
 
-    <!-- Background animado (Vanta.js + Three.js) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
-  </head>
+	<!-- Tailwind CSS -->
+	<script src="https://cdn.tailwindcss.com"></script>
 
-  <body class="min-h-screen flex flex-col bg-gray-900 text-white">
-    <!-- Fundo animado -->
-    <div id="vanta-bg" class="fixed inset-0 -z-10"></div>
+	<!-- Background animado (Vanta.js + Three.js) -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+</head>
 
-    <!-- Header (menu do topo) -->
-    <header class="sticky top-0 z-50 bg-white/10 backdrop-blur-md p-4 shadow-lg">
-      <nav class="flex items-center justify-between w-full px-6">
-    
-        <!-- PERFIL -->
-        <ul class="flex items-center gap-4 font-medium text-white">
-          <li>
-            {% if usuario %}
-            <div class="dropdown-container relative inline-block text-center">
-              <button
-                id="profile-button"
-                class="text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-              >
-                <img src="/static/profile.png" alt="perfil" class="h-7 w-auto" />
-              </button>
-              <div
-                id="profile-dropdown"
-                class="hidden fixed left-0 mt-[1.75rem] w-32 bg-white backdrop-blur-md p-2 rounded shadow z-50"
-              >
-                <a
-                  href="/profile"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >Perfil</a>
-                <a
-                  href="/logout"
-                  class="block px-4 py-2 text-sm text-red-600 hover:bg-red-100"
-                >Sair</a>
-              </div>
-            </div>
-            {% else %}
-            <a
-              href="/login"
-              class="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-700 transition"
-            >Login</a>
-            {% endif %}
-          </li>
-    
-          <li>
-            <h1 class="text-xl font-bold">Shopping-App</h1>
-          </li>
-        </ul>
-    
-        <ul class="flex items-center gap-5 font-medium text-white">
-          <li><a href="/" class="hover:text-blue-400">Home</a></li>
-          <li><a href="/about" class="hover:text-blue-400">Sobre</a></li>
-    
-          <!-- Adicionar Produto (só admin) -->
-          {% if tipo == "admin" %}
-          <li>
-            <div class="dropdown-container relative inline-block text-left">
-              <button
-                id="product-button"
-                class="text-blue-400 hover:text-blue-600 font-semibold"
-              >+ Adicionar Produto</button>
-              <div
-                id="product-dropdown"
-                class="hidden fixed right-0 mt-[1.75rem] w-72 bg-white/10 backdrop-blur-md p-4 rounded-xl shadow z-50"
-              >
-                <form method="post" action="/produtos" class="space-y-4 text-white">
-                  <h2 class="text-lg font-bold">Adicionar Produto</h2>
-                  <label class="block">
-                    Nome:
-                    <input
-                      type="text"
-                      name="nome"
-                      required
-                      class="w-full p-2 mt-1 rounded bg-white/20 border border-white/20 placeholder-white/70"
-                    />
-                  </label>
-                  <label class="block">
-                    Preço:
-                    <input
-                      type="number"
-                      step="0.01"
-                      name="preco"
-                      required
-                      class="w-full p-2 mt-1 rounded bg-white/20 border border-white/20 placeholder-white/70"
-                    />
-                  </label>
-                  <button
-                    type="submit"
-                    class="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded font-semibold"
-                  >Adicionar</button>
-                </form>
-              </div>
-            </div>
-          </li>
-          {% endif %}
-    
-          <!-- Carrinho -->
-          <li>
-            <div class="dropdown-container relative inline-block text-left">
-              <button id="carrinho-button"
-                      class="text-blue-400 hover:text-blue-600 font-semibold">
-                <img src="/static/logo.png" alt="Carrinho"
-                    class="hover:text-blue-400 h-7 w-auto filter invert brightness-200 transition duration-300 group-hover:invert-0 group-hover:brightness-100" />
-              </button>
-              <div id="carrinho-dropdown"
-                  class="hidden fixed right-0 mt-[1.75rem] w-72 bg-white/10 backdrop-blur-md p-4 rounded-xl shadow z-50">
+<body class="min-h-screen flex flex-col bg-gray-900 text-white">
+	<!-- Fundo animado -->
+	<div id="vanta-bg" class="fixed inset-0 -z-10"></div>
 
-                {% if carrinho %}
-                <ul class="space-y-2 text-white">
-                  {% for item in carrinho %}
-                  <li class="flex justify-between">
-                    <span>{{ item.nome }}</span>
-                    <span>R$ {{ "%.2f"|format(item.preco) }}</span>
-                  </li>
-                  {% endfor %}
-                </ul>
-                <form method="post" action="/carrinho/limpar">
-                  <button
-                    class="mt-4 w-full bg-red-600 hover:bg-red-700 py-2 rounded text-white font-semibold"
-                  >Esvaziar carrinho</button>
-                </form>
-                {% else %}
-                <p class="text-white">Seu carrinho está vazio.</p>
-                {% endif %}
+	<!-- Header (menu do topo) -->
+	<header class="sticky top-0 z-50 bg-white/10 backdrop-blur-md p-4 shadow-lg">
+		<nav class="flex items-center justify-between w-full px-6">
 
-              </div>
-            </div>
-          </li>
-        </ul>
-    
-      </nav>
-    </header>
-    
+			<!-- PERFIL -->
+			<ul class="flex items-center gap-4 font-medium text-white">
+				<li>
+					{% if usuario %}
+					<div class="dropdown-container relative inline-block text-center">
+						<button id="profile-button" class="text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+							<img src="/static/profile.png" alt="perfil" class="h-7 w-auto" />
+						</button>
+						<div id="profile-dropdown"
+							class="hidden fixed left-0 mt-[1rem] w-32 bg-white backdrop-blur-md p-2 rounded shadow z-50">
+							<a href="/profile"
+								class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Perfil</a>
+							<a href="/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-100">Sair</a>
+						</div>
+					</div>
+					{% else %}
+					<a href="/login"
+						class="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-700 transition">Login</a>
+					{% endif %}
+				</li>
 
-    <!-- Hero -->
-    <section class="relative w-[60%] mx-auto flex flex-col items-center justify-center mt-20 gap-4 min-h-[32rem]">
-      {% if tipo == "admin" %}
-        <h2 class="text-4xl font-bold text-white">Bem-vindo, ADM!</h2>
-      {% elif tipo == "cliente" %}
-        <h2 class="text-4xl font-bold text-white">Bem-vindo, {{ usuario }}!</h2>
-      {% endif %}
+				<li>
+					<h1 class="text-xl font-bold">Shopping-App</h1>
+				</li>
+			</ul>
 
-      <div class="bg-white/10 backdrop-blur-md rounded-xl px-20 py-16 text-center shadow-xl">
-        <h2 class="text-4xl md:text-6xl font-bold text-white">Shopping-App</h2>
-        <p class="mt-4 text-white/70 text-lg">A experiência de compra que você merece</p>
-        <a href="#produtos" class="mt-6 inline-block px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition duration-300">Ver Produtos</a>
-      </div>
-    </section>
+			<ul class="flex items-center gap-5 font-medium text-white">
+				<li><a href="/" class="hover:text-blue-400">Home</a></li>
+				<li><a href="/about" class="hover:text-blue-400">Sobre</a></li>
 
-    <!-- Conteúdo principal -->
-    <main class="w-full p-6 flex-1">
+				<!-- Adicionar Produto (só admin) -->
+				{% if tipo == "admin" %}
+				<li>
+					<div class="dropdown-container relative inline-block text-left">
+						<button id="product-button" class="text-blue-400 hover:text-blue-600 font-semibold">+ Adicionar
+							Produto</button>
+						<div id="product-dropdown"
+							class="hidden fixed right-0 mt-[1.75rem] w-72 bg-white/10 backdrop-blur-md p-4 rounded-xl shadow z-50">
+							<form method="post" action="/produtos" class="space-y-4 text-white">
+								<h2 class="text-lg font-bold">Adicionar Produto</h2>
+								<label class="block">
+									Nome:
+									<input type="text" name="nome" required
+										class="w-full p-2 mt-1 rounded bg-white/20 border border-white/20 placeholder-white/70" />
+								</label>
+								<label class="block">
+									Preço:
+									<input type="number" step="0.01" name="preco" required
+										class="w-full p-2 mt-1 rounded bg-white/20 border border-white/20 placeholder-white/70" />
+								</label>
 
-      <section class="relative w-[60%] mx-auto flex flex-col items-center mt-20 gap-4 ">
-        <h2 class="text-4xl text-white font-semibold mb-4">Produtos</h2>
-        <p class="text-white/60 mb-6">Confira os itens disponíveis abaixo:</p>
-      </section>
+								<button type="submit"
+									class="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded font-semibold">Adicionar</button>
+							</form>
+						</div>
+					</div>
+				</li>
+				{% endif %}
 
-      <!-- Formulário de produto -->
-      <div id="form-produto" class="hidden mb-8 bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow max-w-md text-white">
-        <form method="post" action="/produtos">
-          <h2 class="text-xl font-semibold mb-4">Adicionar Produto</h2>
-          <label class="block mb-4">
-            Nome:
-            <input type="text" name="nome" required class="w-full p-2 mt-1 rounded bg-white/20 border border-white/20 text-white placeholder-white/70" placeholder="Nome do produto" />
-          </label>
-          <label class="block mb-6">
-            Preço:
-            <input type="number" step="0.01" name="preco" required class="w-full p-2 mt-1 rounded bg-white/20 border border-white/20 text-white placeholder-white/70" placeholder="Preço em R$" />
-          </label>
-          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-semibold">Adicionar</button>
-        </form>
-      </div>
+				<!-- Carrinho -->
+				<li>
+					<div class="dropdown-container relative inline-block text-left">
+						<button id="carrinho-button" class="text-blue-400 hover:text-blue-600 font-semibold">
+							<img src="/static/logo.png" alt="Carrinho"
+								class="hover:text-blue-400 h-7 w-auto filter invert brightness-200 transition duration-300 group-hover:invert-0 group-hover:brightness-100" />
+						</button>
+						<div id="carrinho-dropdown"
+							class="hidden fixed right-0 mt-[1.75rem] w-72 bg-white/10 backdrop-blur-md p-4 rounded-xl shadow z-50">
 
-      <!-- Cards dos produtos -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {% for produto in produtos %}
-          <div class="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-xl text-white flex flex-col items-center transition-transform transform hover:scale-105">
-              <img src="{{ produto.imagem_url or '/static/product.png' }}" alt="{{ produto.nome }}"
-                  class="h-32 w-32 object-contain rounded-xl mb-4 shadow" />
-              <h3 class="text-xl font-semibold">{{ produto.nome }}</h3>
-              <p class="text-blue-400 text-lg font-medium mt-2">R$ {{ produto.preco }}</p>
-              
-              <div class="flex gap-2 w-full mt-4">
-                  <form method="post" action="/carrinho/adicionar" class="flex-1">
-                      <input type="hidden" name="produto_id" value="{{ produto.id }}">
-                      <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl font-semibold transition duration-300">
-                          Adicionar
-                      </button>
-                  </form>
-                  
+							{% if carrinho %}
+							<ul class="space-y-2 text-white">
+								{% for item in carrinho %}
+								<li class="flex justify-between">
+									<span>{{ item.nome }}:</span>
+									<span>R$ {{ "%.2f"|format(item.preco) }}</span>
+									<form method="post" action="/carrinho/remover/{{ item.id }}">
+										<button type="submit"
+											class="text-red-500 hover:text-red-700 text-sm ml-2">Remover</button>
+									</form>
+								</li>
+								{% endfor %}
+							</ul>
+							<form method="post" action="/carrinho/limpar">
+								<button
+									class="mt-4 w-full bg-red-600 hover:bg-red-700 py-2 rounded text-white font-semibold">Esvaziar
+									carrinho</button>
+							</form>
+							{% else %}
+							<p class="text-white">Seu carrinho está vazio.</p>
+							{% endif %}
 
-                  {% if tipo == "admin" %}
-                    <form method="post" action="/produtos/{{ produto.id }}/remover" class="flex-1"
-                          onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
-                        <button type="submit" class="w-full bg-blue-800 hover:bg-blue-900 text-white py-2 rounded-xl font-semibold transition duration-300">
-                            Excluir
-                        </button>
-                    </form>
-                  {% endif %}
-              </div>
-          </div>
-          {% endfor %}
-      </div>
-  </main>
-  
-    <!-- Footer -->
-    <footer class="bg-white/10 backdrop-blur-md text-white p-4 mt-auto border-t border-white/10">
-      <div class="max-w-6xl mx-auto flex justify-between items-center text-sm">
-        <p>&copy; 2025 Shopping-App. Todos os direitos reservados.</p>
-        <div class="flex gap-4">
-          <a href="#" class="hover:text-blue-400">Privacidade</a>
-          <a href="#" class="hover:text-blue-400">Termos</a>
-          <a href="#" class="hover:text-blue-400">Contato</a>
-        </div>
-      </div>
-    </footer>
+						</div>
+					</div>
+				</li>
+			</ul>
+
+		</nav>
+	</header>
 
 
+	<!-- Hero -->
+	<section class="relative w-[60%] mx-auto flex flex-col items-center justify-center mt-20 gap-4 min-h-[32rem]">
+		{% if tipo == "admin" %}
+		<h2 class="text-4xl font-bold text-white">Bem-vindo, ADM!</h2>
+		{% elif tipo == "cliente" %}
+		<h2 class="text-4xl font-bold text-white">Bem-vindo, {{ usuario }}!</h2>
+		{% endif %}
 
-    <!-- Scripts -->
-    <script src="/static/toggleScript.js" defer></script>
-    <script src="/static/script.js"></script>
-  
-  </body>
+		<div class="bg-white/10 backdrop-blur-md rounded-xl px-20 py-16 text-center shadow-xl">
+			<h2 class="text-4xl md:text-6xl font-bold text-white">Shopping-App</h2>
+			<p class="mt-4 text-white/70 text-lg">A experiência de compra que você merece</p>
+			<a href="#produtos"
+				class="mt-6 inline-block px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition duration-300">Ver
+				Produtos</a>
+		</div>
+	</section>
+
+	<!-- Conteúdo principal -->
+	<main class="w-full p-6 flex-1">
+
+		<section class="relative w-[60%] mx-auto flex flex-col items-center mt-20 gap-4 ">
+			<h2 class="text-4xl text-white font-semibold mb-4">Produtos</h2>
+			<p class="text-white/60 mb-6">Confira os itens disponíveis abaixo:</p>
+		</section>
+
+		<!-- Formulário de produto -->
+		<div id="form-produto"
+			class="hidden mb-8 bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow max-w-md text-white">
+			<form method="post" action="/produtos" enctype="multipart/form-data" class="text-white space-y-4">
+				<h2 class="text-lg font-bold">Adicionar Produto</h2>
+			  
+				<div>
+				  <label>Nome:</label>
+				  <input type="text" name="nome" required class="..." />
+				</div>
+			  
+				<div>
+				  <label>Preço:</label>
+				  <input type="number" step="0.01" name="preco" required class="..." />
+				</div>
+			  
+				<div>
+				  <label>Imagem:</label>
+				  <input type="file" name="imagem" accept="image/*" class="..." />
+				</div>
+			  
+				<button type="submit" class="...">Adicionar</button>
+			  </form>
+		</div>
+
+		<!-- Cards dos produtos -->
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+			{% for produto in produtos %}
+			<div
+				class="relative bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-xl text-white flex flex-col items-center transition-transform transform hover:scale-105">
+				{% if tipo == "admin" %}
+				<button onclick="abrirModalEdicao({{ produto.id }}, '{{ produto.nome }}', {{ produto.preco }})"
+					class="absolute top-2 right-2 text-yellow-400 hover:text-yellow-300 transition"
+					title="Editar Produto">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+						stroke="currentColor" stroke-width="2">
+						<path stroke-linecap="round" stroke-linejoin="round"
+							d="M15.232 5.232l3.536 3.536M9 13l6-6m2-2a2.828 2.828 0 114 4l-10 10H5v-4l10-10z" />
+					</svg>
+				</button>
+				{% endif %}
+
+				<img src="{{ '/static/product.png' }}" alt="{{ produto.nome }}"
+					class="h-32 w-32 object-contain rounded-xl mb-4 shadow" />
+				<h3 class="text-xl font-semibold">{{ produto.nome }}</h3>
+				<p class="text-blue-400 text-lg font-medium mt-2">R$ {{ produto.preco }}</p>
+
+				<div class="flex gap-2 w-full mt-4">
+					<form method="post" action="/carrinho/adicionar" class="flex-1">
+						<input type="hidden" name="produto_id" value="{{ produto.id }}">
+						<button
+							class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl font-semibold transition duration-300">
+							Adicionar ao Carrinho
+						</button>
+					</form>
+
+
+					{% if tipo == "admin" %}
+					<form method="post" action="/produtos/{{ produto.id }}/remover" class="flex-1"
+						onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
+						<button type="submit"
+							class="w-full bg-blue-800 hover:bg-blue-900 text-white py-2 rounded-xl font-semibold transition duration-300">
+							Excluir Produto
+						</button>
+					</form>
+					{% endif %}
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</main>
+
+	<!-- Footer -->
+	<footer class="bg-white/10 backdrop-blur-md text-white p-4 mt-auto border-t border-white/10">
+		<div class="max-w-6xl mx-auto flex justify-between items-center text-sm">
+			<p>&copy; 2025 Shopping-App. Todos os direitos reservados.</p>
+			<div class="flex gap-4">
+				<a href="#" class="hover:text-blue-400">Privacidade</a>
+				<a href="#" class="hover:text-blue-400">Termos</a>
+				<a href="#" class="hover:text-blue-400">Contato</a>
+			</div>
+		</div>
+	</footer>
+
+	<!-- Modal de Edição -->
+	<div id="modal-edicao" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+		<div class="bg-white text-black p-6 rounded-xl shadow-lg w-full max-w-md">
+			<h2 class="text-xl font-bold mb-4">Editar Produto</h2>
+			<form id="form-edicao" method="post">
+				<input type="hidden" name="produto_id" id="edit-produto-id">
+
+				<label class="block mb-3">
+					Nome:
+					<input type="text" name="nome" id="edit-nome" required class="w-full p-2 border rounded mt-1">
+				</label>
+
+				<label class="block mb-4">
+					Preço:
+					<input type="number" name="preco" step="0.01" id="edit-preco" required
+						class="w-full p-2 border rounded mt-1">
+				</label>
+
+				<div class="flex justify-end gap-2">
+					<button type="button" onclick="fecharModalEdicao()"
+						class="px-4 py-2 bg-gray-300 rounded">Cancelar</button>
+					<button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Salvar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- Scripts -->
+	<script src="/static/toggleScript.js" defer></script>
+	<script src="/static/script.js"></script>
+	<script src="/static/modalScript.js"></script>
+
+
+</body>
+
 </html>

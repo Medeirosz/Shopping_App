@@ -41,3 +41,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.addEventListener("click", closeAll);
 });
+

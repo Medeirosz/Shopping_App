@@ -14,3 +14,4 @@ VANTA.NET({
   maxDistance: 1.0,
   spacing: 20.0
 });
+
