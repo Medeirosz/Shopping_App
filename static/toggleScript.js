@@ -42,3 +42,17 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("click", closeAll);
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+  const btn  = document.getElementById('carrinho-button');
+  const menu = document.getElementById('carrinho-dropdown');
+  if (!btn || !menu) return;
+
+  btn.addEventListener('click', e => {
+  e.stopPropagation();
+  menu.classList.toggle('hidden');
+  });
+
+  document.addEventListener('click', () => {
+  menu.classList.add('hidden');
+  });
+});

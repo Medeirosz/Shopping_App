@@ -154,24 +154,20 @@
 			class="hidden mb-8 bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow max-w-md text-white">
 			<form method="post" action="/produtos" enctype="multipart/form-data" class="text-white space-y-4">
 				<h2 class="text-lg font-bold">Adicionar Produto</h2>
-			  
+
 				<div>
-				  <label>Nome:</label>
-				  <input type="text" name="nome" required class="..." />
+					<label>Nome:</label>
+					<input type="text" name="nome" required class="..." />
 				</div>
-			  
+
 				<div>
-				  <label>Preço:</label>
-				  <input type="number" step="0.01" name="preco" required class="..." />
+					<label>Preço:</label>
+					<input type="number" step="0.01" name="preco" required class="..." />
 				</div>
-			  
-				<div>
-				  <label>Imagem:</label>
-				  <input type="file" name="imagem" accept="image/*" class="..." />
-				</div>
-			  
+
+
 				<button type="submit" class="...">Adicionar</button>
-			  </form>
+			</form>
 		</div>
 
 		<!-- Cards dos produtos -->
@@ -226,14 +222,14 @@
 		<div class="max-w-6xl mx-auto flex justify-between items-center text-sm">
 			<p>&copy; 2025 Shopping-App. Todos os direitos reservados.</p>
 			<div class="flex gap-4">
-				<a href="#" class="hover:text-blue-400">Privacidade</a>
-				<a href="#" class="hover:text-blue-400">Termos</a>
-				<a href="#" class="hover:text-blue-400">Contato</a>
+				<a id="open-privacy-btn" class="hover:text-blue-400">Privacidade</a>
+				<a id="open-terms-btn" class="hover:text-blue-400">Termos</a>
+				<a id="open-contact-btn" class="hover:text-blue-400">Contato</a>
 			</div>
 		</div>
 	</footer>
 
-	<!-- Modal de Edição -->
+	<!-- Modal de Edição de Produto -->
 	<div id="modal-edicao" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
 		<div class="bg-white text-black p-6 rounded-xl shadow-lg w-full max-w-md">
 			<h2 class="text-xl font-bold mb-4">Editar Produto</h2>
@@ -260,30 +256,240 @@
 		</div>
 	</div>
 
+	<!-- Modal de Contato -->
+	<div id="contact-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+		<div class="bg-white rounded-xl p-6 w-full max-w-sm text-gray-800">
+			<h2 class="text-2xl font-bold mb-4">Fale Conosco</h2>
+			<ul class="space-y-2">
+				<li><strong>E-mail:</strong> contato@exemplo.com</li>
+				<li><strong>Telefone:</strong> (11) 1234-5678</li>
+				<li><strong>Endereço:</strong> Rua Falsa, 123, Cidade Exemplo</li>
+			</ul>
+			<div class="mt-6 text-right">
+				<button id="close-contact-btn" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded">
+					Fechar
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal de Termos -->
+	<div id="terms-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+		<div class="bg-white rounded-xl p-6 w-full max-w-4xl max-h-[80vh] overflow-y-auto shadow-lg text-gray-800">
+			<h2 class="text-3xl font-bold mb-4">Termos de Serviço</h2>
+			<p class="text-sm text-gray-600 mb-6">Última atualização: 20/05/2025</p>
+
+			<div class="space-y-6 text-justify">
+				<section>
+					<h3 class="text-xl font-semibold mb-2">1. Introdução</h3>
+					<p>
+						Bem-vindo ao site da Shopping-App (“nós”, “nosso”). Ao acessar ou usar este site, você
+						concorda com estes Termos de Serviço. Se não concordar, por favor, não utilize nossos
+						serviços.
+					</p>
+				</section>
+
+				<section>
+					<h3 class="text-xl font-semibold mb-2">2. Definições</h3>
+					<ul class="list-disc list-inside space-y-1">
+						<li><strong>Usuário</strong>: qualquer pessoa que acesse ou utilize o site.</li>
+						<li><strong>Conteúdo</strong>: textos, imagens, vídeos, áudios ou outros materiais
+							disponibilizados no site.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3 class="text-xl font-semibold mb-2">3. Aceitação dos Termos</h3>
+					<p>
+						O uso contínuo deste site implica a aceitação integral destes Termos. Reservamo-nos o
+						direito de, a qualquer tempo, alterar ou atualizar estes Termos sem aviso prévio. As
+						alterações entram em vigor imediatamente após sua publicação.
+					</p>
+				</section>
+
+				<section>
+					<h3 class="text-xl font-semibold mb-2">4. Licença de Uso</h3>
+					<p>
+						Concedemos ao Usuário uma licença limitada, não exclusiva e intransferível para acessar e
+						usar o site para fins pessoais e não comerciais.
+					</p>
+				</section>
+
+				<section>
+					<h3 class="text-xl font-semibold mb-2">5. Obrigações do Usuário</h3>
+					<ul class="list-disc list-inside space-y-1">
+						<li>Manter a precisão das informações de cadastro.</li>
+						<li>Não transmitir vírus, malwares ou qualquer código nocivo.</li>
+						<li>Respeitar direitos de propriedade intelectual.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3 class="text-xl font-semibold mb-2">6. Atividades Proibidas</h3>
+					<p>
+						Você concorda em não copiar, reproduzir ou distribuir Conteúdo sem autorização, nem usar o
+						site para fins ilegais ou não autorizados, ou tentar interferir em seu funcionamento.
+					</p>
+				</section>
+
+				<section>
+					<h3 class="text-xl font-semibold mb-2">7. Propriedade Intelectual</h3>
+					<p>
+						Todo o Conteúdo e a marca “Shopping-App” são de nossa propriedade ou de nossos
+						licenciantes. É proibida qualquer utilização sem prévia autorização escrita.
+					</p>
+				</section>
+
+				<section>
+					<h3 class="text-xl font-semibold mb-2">8. Isenção de Garantias</h3>
+					<p>
+						O site é fornecido “no estado em que se encontra”, sem garantias de qualquer espécie,
+						expressas ou implícitas.
+					</p>
+				</section>
+
+				<section>
+					<h3 class="text-xl font-semibold mb-2">9. Limitação de Responsabilidade</h3>
+					<p>
+						Em nenhuma hipótese a Shopping-App será responsável por quaisquer danos indiretos,
+						incidentais, especiais ou consequenciais decorrentes do uso ou da impossibilidade de usar
+						o site.
+					</p>
+				</section>
+
+				<section>
+					<h3 class="text-xl font-semibold mb-2">10. Indenização</h3>
+					<p>
+						Você concorda em indenizar e isentar a Shopping-App de qualquer reclamação, responsabilidade,
+						perda ou despesa decorrente de sua violação destes Termos.
+					</p>
+				</section>
+
+				<section>
+					<h3 class="text-xl font-semibold mb-2">11. Lei Aplicável e Foro</h3>
+					<p>
+						Estes Termos serão regidos pelas leis do Estado de São Paulo, Brasil. Fica eleito o foro da
+						Comarca de São Paulo para dirimir qualquer controvérsia.
+					</p>
+				</section>
+
+				<section>
+					<h3 class="text-xl font-semibold mb-2">12. Contato</h3>
+					<ul class="list-disc list-inside space-y-1">
+						<li><strong>E-mail:</strong> contato@shopping-app.com</li>
+						<li><strong>Telefone:</strong> +55 (11) 91234-5678</li>
+						<li><strong>Endereço:</strong> Rua Exemplo, 123, São Paulo – SP</li>
+					</ul>
+				</section>
+			</div>
+
+			<div class="mt-6 text-right">
+				<button id="close-terms-btn" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded">
+					Fechar
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal de Privacidade -->
+	<div id="privacy-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+		<div class="bg-white rounded-xl p-6 w-full max-w-4xl max-h-[80vh] overflow-y-auto shadow-lg text-gray-800">
+			<h2 class="text-3xl font-bold mb-2">Política de Privacidade</h2>
+			<p class="text-sm text-gray-600 mb-6">Última atualização: 20/05/2025</p>
+
+			<div class="space-y-6 text-justify">
+				<section>
+					<h3 class="text-xl font-semibold mb-2">1. Coleta de Informações</h3>
+					<p>
+						Quando você visita nosso site, podemos coletar alguns dados automaticamente, como:
+					</p>
+					<ul class="list-disc list-inside space-y-1">
+						<li>Endereço IP;</li>
+						<li>Tipo de navegador e sistema operacional;</li>
+						<li>Páginas acessadas e tempo de permanência;</li>
+						<li>Cookies e tecnologias semelhantes.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3 class="text-xl font-semibold mb-2">2. Uso de Dados</h3>
+					<p>
+						Utilizamos esses dados para:
+					</p>
+					<ul class="list-disc list-inside space-y-1">
+						<li>Melhorar a experiência de navegação;</li>
+						<li>Personalizar conteúdo e ofertas;</li>
+						<li>Monitorar e analisar tendências de uso;</li>
+						<li>Garantir a segurança da plataforma.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3 class="text-xl font-semibold mb-2">3. Compartilhamento de Informações</h3>
+					<p>
+						Não vendemos seus dados pessoais. Podemos compartilhá-los apenas com:
+					</p>
+					<ul class="list-disc list-inside space-y-1">
+						<li>Prestadores de serviço que apoiam nosso site;</li>
+						<li>Autoridades legais, quando exigido por lei;</li>
+						<li>Afiliados ou parceiros, sempre de forma agregada ou anonimizada.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3 class="text-xl font-semibold mb-2">4. Cookies</h3>
+					<p>
+						Usamos cookies para lembrar suas preferências e agilizar seu acesso. Você pode desativá-los
+						nas configurações do navegador, mas isso pode afetar funcionalidades do site.
+					</p>
+				</section>
+
+				<section>
+					<h3 class="text-xl font-semibold mb-2">5. Segurança</h3>
+					<p>
+						Empregamos medidas técnicas e organizacionais para proteger seus dados contra acesso não
+						autorizado, perda ou alteração.
+					</p>
+				</section>
+
+				<section>
+					<h3 class="text-xl font-semibold mb-2">6. Direitos do Usuário</h3>
+					<ul class="list-disc list-inside space-y-1">
+						<li>Solicitar acesso, correção ou exclusão de seus dados;</li>
+						<li>Retirar seu consentimento a qualquer momento;</li>
+						<li>Receber uma cópia dos dados em formato estruturado.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3 class="text-xl font-semibold mb-2">7. Contato</h3>
+					<ul class="list-disc list-inside space-y-1">
+						<li><strong>E-mail:</strong> contato@shopping-app.com</li>
+						<li><strong>Telefone:</strong> +55 (11) 91234-5678</li>
+						<li><strong>Endereço:</strong> Rua Exemplo, 123, São Paulo – SP</li>
+					</ul>
+				</section>
+			</div>
+
+			<div class="mt-6 text-right">
+				<button id="close-privacy-btn" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded">
+					Fechar
+				</button>
+			</div>
+		</div>
+	</div>
+
+
 	<!-- Scripts -->
 	<script src="/static/toggleScript.js" defer></script>
 	<script src="/static/script.js"></script>
 	<script src="/static/modalScript.js"></script>
+	<script src="/static/contactModalScript.js"></script>
+	<script src="/static/termsModalScript.js"></script>
+	<script src="/static/privacyModalScript.js" defer></script>
 
-	 <!-- ====== dropdown do carrinho para cliente ====== -->
-	 <script>
-		document.addEventListener('DOMContentLoaded', () => {
-		  const btn  = document.getElementById('carrinho-button');
-		  const menu = document.getElementById('carrinho-dropdown');
-		  if (!btn || !menu) return;
-	
-		  // abre / fecha o menu
-		  btn.addEventListener('click', e => {
-			e.stopPropagation();
-			menu.classList.toggle('hidden');
-		  });
-	
-		  // fecha ao clicar fora
-		  document.addEventListener('click', () => {
-			menu.classList.add('hidden');
-		  });
-		});
-	  </script>
+
+
 
 </body>
 
