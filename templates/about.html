@@ -1,86 +1,93 @@
 <!-- templates/perfil.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
-        <link rel="stylesheet" href="../static/index.css">
-        <title>Shopping-App</title>
-    
-        <!-- Tailwind CSS -->
-        <script src="https://cdn.tailwindcss.com"></script>
-    
-        <!-- Background animado (Vanta.js + Three.js) -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
-    </head>
 
-    <body class="min-h-screen flex flex-col bg-gray-900 text-white">
-        <!-- Fundo animado -->
-        <div id="vanta-bg" class="fixed inset-0 -z-10"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="../static/index.css">
+  <title>Shopping-App</title>
 
-        <header class="sticky top-0 z-50 bg-white/10 backdrop-blur-md p-4 shadow-lg">
-            <nav class="flex items-center justify-between w-full px-6">
-      
-              <!-- Logo e título -->
-              <ul class="flex items-center gap-4 font-medium text-white">
-                <li>
-                    {% if usuario %}
-                    <div class="relative inline-block text-center">
-                      <button onclick="toggleDropdown()" class=" text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                        <img src="/static/profile.png" alt="profile" class="h-7 w-auto" />
-                      </button>
-                    
-                      <div id="dropdown" class="fixed left-0 hidden mt-4 w-[8rem] bg-white backdrop-blur-md shadow-md z-50">
-                        <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Perfil</a>
-                        <a href="/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-100">Sair</a>
-                      </div>
-                    </div>
-                  {% else %}
-                    <a href="/login" class="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-700 transition">
-                      Login
-                    </a>
-                  {% endif %}
-                </li>
-                <li>
-                  <h1 class="text-xl font-bold">Shopping-App</h1>
-                </li>
-              </ul>
-      
-              <!-- Menu -->
-              <ul class="flex items-center gap-5 font-medium text-white">
-                <li><a href="/" class="hover:text-blue-400">Home</a></li>
-                <li><a href="/about" class="hover:text-blue-400">Sobre</a></li>
-                <li>
-                  <a href="#" class="relative group h-7 w-7 block">
-                    <img src="/static/logo.png" alt="Carrinho" class="hover:text-blue-400 h-7 w-auto filter invert brightness-200 transition duration-300 group-hover:invert-0 group-hover:brightness-100" />
-                  </a>
-                </li>
-              </ul>
-            </nav>
-        </header>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-        <!--  -->
+  <!-- Background animado (Vanta.js + Three.js) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+</head>
 
-        <section>
-            <div class="h-40"></div>
-        </section>
+<body class="min-h-screen flex flex-col bg-gray-900 text-white">
+  <!-- Fundo animado -->
+  <div id="vanta-bg" class="fixed inset-0 -z-10"></div>
 
-        <!-- Footer -->
-        <footer class="bg-white/10 backdrop-blur-md text-white p-4 mt-auto border-t border-white/10">
-            <div class="max-w-6xl mx-auto flex justify-between items-center text-sm">
-            <p>&copy; 2025 Shopping-App. Todos os direitos reservados.</p>
-            <div class="flex gap-4">
-                <a href="#" class="hover:text-blue-400">Privacidade</a>
-                <a href="#" class="hover:text-blue-400">Termos</a>
-                <a href="#" class="hover:text-blue-400">Contato</a>
+  <header class="sticky top-0 z-50 bg-white/10 backdrop-blur-md p-4 shadow-lg">
+    <nav class="flex items-center justify-between w-full px-6">
+
+      <!-- Logo e título -->
+      <ul class="flex items-center gap-4 font-medium text-white">
+        <li>
+          {% if usuario %}
+          <div class="relative inline-block text-center">
+            <button onclick="toggleDropdown()" class=" text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+              <img src="/static/profile.png" alt="profile" class="h-7 w-auto" />
+            </button>
+
+            <div id="dropdown" class="fixed left-0 hidden mt-4 w-[8rem] bg-white backdrop-blur-md shadow-md z-50">
+              <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Perfil</a>
+              <a href="/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-100">Sair</a>
             </div>
-            </div>
-        </footer>
+          </div>
+          {% else %}
+          <a href="/login" class="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-700 transition">
+            Login
+          </a>
+          {% endif %}
+        </li>
+        <li>
+          <h1 class="text-xl font-bold">Shopping-App</h1>
+        </li>
+      </ul>
 
-        <!-- Script externo -->
-        <script src="static/script.js"></script>
-        
-    </body>
+      <!-- Menu -->
+      <ul class="flex items-center gap-5 font-medium text-white">
+        <li><a href="/" class="hover:text-blue-400">Home</a></li>
+        <li><a href="/about" class="hover:text-blue-400">Sobre</a></li>
+        <li>
+          <a href="#" class="relative group h-7 w-7 block">
+            <img src="/static/logo.png" alt="Carrinho"
+              class="hover:text-blue-400 h-7 w-auto filter invert brightness-200 transition duration-300 group-hover:invert-0 group-hover:brightness-100" />
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+
+  <section>
+    <div class="h-40">teste</div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-white/10 backdrop-blur-md text-white p-4 mt-auto border-t border-white/10">
+    <div class="max-w-6xl mx-auto flex justify-between items-center text-sm">
+      <p>&copy; 2025 Shopping-App. Todos os direitos reservados.</p>
+      <div class="flex gap-4">
+        <a href="#" class="hover:text-blue-400">Privacidade</a>
+        <a href="#" class="hover:text-blue-400">Termos</a>
+        <a href="#" class="hover:text-blue-400">Contato</a>
+      </div>
+    </div>
+  </footer>
+
+  {% include "partials/modals.html" %}
+
+  <!-- Scripts -->
+  <script src="/static/script.js" defer></script>
+  <script src="/static/editProductModalScript.js" defer></script>
+  <script src="/static/toggleDropdowns.js" defer></script>
+  <script src="/static/modals.js" defer></script>
+
+</body>
+
 </html>

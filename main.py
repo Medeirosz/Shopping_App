@@ -102,7 +102,6 @@ def login(
     password: str = Form(...),
     db: Session = Depends(get_db)
 ):
-    # Aqui você substituiria pelo seu lookup real no DB
     usuarios = {
         "adm":     {"senha": "123", "tipo": "admin",   "id": 1},
         "cliente": {"senha": "123", "tipo": "cliente", "id": 2},

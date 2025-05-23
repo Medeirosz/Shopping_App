@@ -1,4 +1,4 @@
-// // Fundo animado com Vanta.js
+// Fundo animado com Vanta.js
 VANTA.NET({
   el: "#vanta-bg",
   mouseControls: false,
