@@ -21,61 +21,181 @@
   <!-- Fundo animado -->
   <div id="vanta-bg" class="fixed inset-0 -z-10"></div>
 
+  <!-- Header (menu do topo) -->
   <header class="sticky top-0 z-50 bg-white/10 backdrop-blur-md p-4 shadow-lg">
     <nav class="flex items-center justify-between w-full px-6">
 
-      <!-- Logo e título -->
+      <!-- PERFIL -->
       <ul class="flex items-center gap-4 font-medium text-white">
         <li>
           {% if usuario %}
-          <div class="relative inline-block text-center">
-            <button onclick="toggleDropdown()" class=" text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-              <img src="/static/profile.png" alt="profile" class="h-7 w-auto" />
+          <div class="dropdown-container relative inline-block text-center">
+            <button id="profile-button" class="text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+              <img src="/static/profile.png" alt="perfil" class="h-7 w-auto" />
             </button>
-
-            <div id="dropdown" class="fixed left-0 hidden mt-4 w-[8rem] bg-white backdrop-blur-md shadow-md z-50">
+            <div id="profile-dropdown"
+              class="hidden fixed left-0 mt-[1rem] w-32 bg-white backdrop-blur-md p-2 rounded shadow z-50">
               <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Perfil</a>
               <a href="/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-100">Sair</a>
             </div>
           </div>
           {% else %}
-          <a href="/login" class="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-700 transition">
-            Login
-          </a>
+          <a href="/login" class="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-700 transition">Login</a>
           {% endif %}
         </li>
+
         <li>
           <h1 class="text-xl font-bold">Shopping-App</h1>
         </li>
       </ul>
 
-      <!-- Menu -->
       <ul class="flex items-center gap-5 font-medium text-white">
         <li><a href="/" class="hover:text-blue-400">Home</a></li>
         <li><a href="/about" class="hover:text-blue-400">Sobre</a></li>
+
+        <!-- Adicionar Produto (só admin) -->
+        {% if tipo == "admin" %}
         <li>
-          <a href="#" class="relative group h-7 w-7 block">
-            <img src="/static/logo.png" alt="Carrinho"
-              class="hover:text-blue-400 h-7 w-auto filter invert brightness-200 transition duration-300 group-hover:invert-0 group-hover:brightness-100" />
-          </a>
+          <div class="dropdown-container relative inline-block text-left">
+            <button id="product-button" class="text-blue-400 hover:text-blue-600 font-semibold">+ Adicionar
+              Produto</button>
+            <div id="product-dropdown"
+              class="hidden fixed right-0 mt-[1.75rem] w-72 bg-white/10 backdrop-blur-md p-4 rounded-xl shadow z-50">
+              <form method="post" action="/produtos" class="space-y-4 text-white">
+                <h2 class="text-lg font-bold">Adicionar Produto</h2>
+                <label class="block">
+                  Nome:
+                  <input type="text" name="nome" required
+                    class="w-full p-2 mt-1 rounded bg-white/20 border border-white/20 placeholder-white/70" />
+                </label>
+                <label class="block">
+                  Preço:
+                  <input type="number" step="0.01" name="preco" required
+                    class="w-full p-2 mt-1 rounded bg-white/20 border border-white/20 placeholder-white/70" />
+                </label>
+                <button type="submit"
+                  class="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded font-semibold">Adicionar</button>
+              </form>
+            </div>
+          </div>
+        </li>
+        {% endif %}
+
+        <!-- Carrinho -->
+        <li>
+          <div class="dropdown-container relative inline-block text-left">
+            <button id="carrinho-button" class="text-blue-400 hover:text-blue-600 font-semibold">
+              <img src="/static/logo.png" alt="Carrinho"
+                class="hover:text-blue-400 h-7 w-auto filter invert brightness-200 transition duration-300 group-hover:invert-0 group-hover:brightness-100" />
+            </button>
+            <div id="carrinho-dropdown"
+              class="hidden fixed right-0 mt-[1.75rem] w-72 bg-white/10 backdrop-blur-md p-4 rounded-xl shadow z-50">
+
+              {% if carrinho %}
+              <ul class="space-y-2 text-white">
+                {% for item in carrinho %}
+                <li class="flex justify-between">
+                  <span>{{ item.nome }}:</span>
+                  <span>R$ {{ "%.2f"|format(item.preco) }}</span>
+                  <form method="post" action="/carrinho/remover/{{ item.id }}">
+                    <button type="submit" class="text-red-500 hover:text-red-700 text-sm ml-2">Remover</button>
+                  </form>
+                </li>
+                {% endfor %}
+              </ul>
+              <form method="post" action="/carrinho/limpar">
+                <button class="mt-4 w-full bg-red-600 hover:bg-red-700 py-2 rounded text-white font-semibold">Esvaziar
+                  carrinho</button>
+              </form>
+              {% else %}
+              <p class="text-white">Seu carrinho está vazio.</p>
+              {% endif %}
+
+            </div>
+          </div>
         </li>
       </ul>
+
     </nav>
   </header>
 
-
-  <section>
-    <div class="h-40">teste</div>
+  <!-- Hero Section -->
+  <section class="flex flex-col items-center text-center mt-16 px-4">
+    <h1 class="text-5xl font-bold mb-4">Sobre o Shopping-App</h1>
+    <p class="max-w-3xl text-gray-300">
+      Aplicação completa de e-commerce com frontend responsivo em TailwindCSS e backend em FastAPI + SQLAlchemy.
+      Conta com painel de administrador para gerenciar produtos e interface de cliente para navegar, adicionar ao
+      carrinho e finalizar compras.
+    </p>
   </section>
 
+  <!-- Seções de Conteúdo -->
+  <main class="flex-1 max-w-4xl mx-auto px-4 py-12 space-y-16">
+
+    <!-- Funcionalidades -->
+    <section>
+      <h2 class="text-3xl font-semibold mb-4">Funcionalidades Principais</h2>
+      <ul class="list-disc list-inside space-y-2 text-gray-200">
+        <li>CRUD completo de produtos (criar, listar, editar e excluir).</li>
+        <li>Autenticação de usuário e controle de sessão com roles (admin / cliente).</li>
+        <li>Carrinho de compras dinâmico com adição, remoção e limpeza de itens.</li>
+        <li>Templates Jinja2 com componentes reutilizáveis e partials para modais.</li>
+        <li>Design responsivo e moderno usando Tailwind CSS.</li>
+      </ul>
+    </section>
+
+    <!-- Arquitetura e Tecnologias -->
+    <section>
+      <h2 class="text-3xl font-semibold mb-4">Arquitetura & Tecnologias</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-xl font-medium mb-2">Frontend</h3>
+          <ul class="list-disc list-inside text-gray-200 space-y-1">
+            <li>HTML5, CSS3, Tailwind CSS</li>
+            <li>Jinja2 Templates</li>
+            <li>JavaScript puro para modais e dropdowns</li>
+            <li>Vanta.js + Three.js para animação de fundo</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-medium mb-2">Backend</h3>
+          <ul class="list-disc list-inside text-gray-200 space-y-1">
+            <li>Python 3.10+</li>
+            <li>FastAPI</li>
+            <li>SQLAlchemy + SQLite (ou outro DB)</li>
+            <li>SessionMiddleware para autenticação</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sobre o Desenvolvedor -->
+    <section>
+      <h2 class="text-3xl font-semibold mb-4">Sobre o Desenvolvedor</h2>
+      <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 text-gray-100">
+        <p>Olá! Eu sou o Rafael, estudante de Ciência da Computação com foco em desenvolvimento web full-stack. Este
+          projeto demonstra minhas habilidades em construir aplicações modernas, desde a modelagem de dados até a
+          interface do usuário.</p>
+      </div>
+    </section>
+
+    <!-- Contato -->
+    <section class="text-center" style="padding-bottom: 1rem;">
+      <h2 class="text-3xl font-semibold mb-4">Fale Comigo</h2>
+      <p class="text-gray-300">E-mail: <a class="text-blue-400">rafaelnp06@gmail.com</a></p>
+      <p class="text-gray-300">GitHub: <a href="https://github.com/Medeirosz" target="_blank"
+          class="text-blue-400">https://github.com/Medeirosz</a></p>
+    </section>
+  </main>
+
   <!-- Footer -->
-  <footer class="bg-white/10 backdrop-blur-md text-white p-4 mt-auto border-t border-white/10">
-    <div class="max-w-6xl mx-auto flex justify-between items-center text-sm">
+  <footer class="bg-black bg-opacity-50 backdrop-blur-md py-4">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center text-sm text-gray-400">
       <p>&copy; 2025 Shopping-App. Todos os direitos reservados.</p>
-      <div class="flex gap-4">
-        <a href="#" class="hover:text-blue-400">Privacidade</a>
-        <a href="#" class="hover:text-blue-400">Termos</a>
-        <a href="#" class="hover:text-blue-400">Contato</a>
+      <div class="flex gap-6 mt-2 sm:mt-0">
+        <a id="open-privacy-btn" class="hover:text-blue-400 transition cursor-pointer">Privacidade</a>
+        <a id="open-terms-btn" class="hover:text-blue-400 transition cursor-pointer">Termos</a>
+        <a id="open-contact-btn" class="hover:text-blue-400 transition cursor-pointer">Contato</a>
       </div>
     </div>
   </footer>
