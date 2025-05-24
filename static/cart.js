@@ -1,48 +1,38 @@
-// /static/js/cart.js
+// cart.js
 document.addEventListener("DOMContentLoaded", () => {
-    // capturar todos os botões de "Adicionar ao Carrinho"
-    document.querySelectorAll("form[action='/carrinho/adicionar']").forEach(form => {
-      form.addEventListener("submit", async e => {
-        e.preventDefault();
-        const fd = new FormData(form);
-        const resp = await fetch(form.action, { method: "POST", body: fd });
-        const data = await resp.json();
-        if (data.ok) {
-          // aqui você pode chamar uma função para recarregar só o dropdown do carrinho
-          atualizarCarrinho();
-        } else {
-          alert(data.error || "Erro ao adicionar");
-        }
-      });
-    });
+    document.addEventListener("submit", async e => {
+      const form = e.target;
+      const action = form.getAttribute("action");
   
-    // mesmos para remover item
-    document.querySelectorAll("form[action^='/carrinho/remover']").forEach(form => {
-      form.addEventListener("submit", async e => {
+      // adicionar ao carrinho
+      if (action === "/carrinho/adicionar") {
         e.preventDefault();
-        const resp = await fetch(form.action, { method: "POST" });
-        const data = await resp.json();
-        if (data.ok) atualizarCarrinho();
-        else alert(data.error || "Erro ao remover");
-      });
-    });
+        await fetch(action, {
+          method: "POST",
+          body: new FormData(form),
+        });
+        return atualizarCarrinho();
+      }
   
-    // e para esvaziar
-    const limparForm = document.querySelector("form[action='/carrinho/limpar']");
-    if (limparForm) {
-      limparForm.addEventListener("submit", async e => {
+      // remover item
+      if (action && action.startsWith("/carrinho/remover")) {
         e.preventDefault();
-        const resp = await fetch(limparForm.action, { method: "POST" });
-        const data = await resp.json();
-        if (data.ok) atualizarCarrinho();
-        else alert(data.error || "Erro ao esvaziar");
-      });
-    }
+        await fetch(action, { method: "POST" });
+        return atualizarCarrinho();
+      }
+  
+      // esvaziar carrinho
+      if (action === "/carrinho/limpar") {
+        e.preventDefault();
+        await fetch(action, { method: "POST" });
+        return atualizarCarrinho();
+      }
+    });
   });
   
-  // Função que busca o HTML parcial do carrinho e injeta ele dentro do dropdown
+  // recarrega somente o HTML interno do dropdown do carrinho
   async function atualizarCarrinho() {
-    const resp = await fetch("/carrinho/partial");     // vea etapa 4: crie esta rota
+    const resp = await fetch("/carrinho/partial");
     const html = await resp.text();
     document.getElementById("carrinho-dropdown").innerHTML = html;
   }

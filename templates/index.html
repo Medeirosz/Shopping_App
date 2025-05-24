@@ -85,15 +85,15 @@
 
 				<!-- Carrinho -->
 				<li class="dropdown-container relative inline-block">
-					<button id="carrinho-button"
-							class="text-blue-400 hover:text-blue-600 font-semibold">
-					  <img src="/static/logo.png" alt="Carrinho"
-						   class="h-7 w-auto filter invert brightness-200 transition duration-300" />
+					<button id="carrinho-button" class="text-blue-400 hover:text-blue-600 font-semibold">
+						<img src="/static/logo.png" alt="Carrinho"
+							class="h-7 w-auto filter invert brightness-200 transition duration-300" />
 					</button>
-					<div id="carrinho-dropdown" class="hidden fixed right-0 mt-[1.75rem] w-72 bg-white/10 backdrop-blur-md p-4 rounded-xl shadow z-50">
+					<div id="carrinho-dropdown"
+						class="hidden fixed right-0 mt-[1.75rem] w-72 bg-white/10 backdrop-blur-md p-4 rounded-xl shadow z-50 max-h-[60vh] overflow-y-auto">
 						{% include "partials/cart_dropdown.html" %}
 					</div>
-				  </li>
+				</li>
 			</ul>
 
 		</nav>
@@ -173,10 +173,10 @@
 						<input type="hidden" name="produto_id" value="{{ produto.id }}">
 
 						{% if usuario %}
-							<button
-								class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl font-semibold transition duration-300">
-								Adicionar ao Carrinho
-							</button>
+						<button
+							class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl font-semibold transition duration-300">
+							Adicionar ao Carrinho
+						</button>
 						{% endif %}
 					</form>
 
@@ -197,17 +197,17 @@
 	</main>
 
 	<!-- Footer -->
-    <footer class="bg-black bg-opacity-50 backdrop-blur-md py-4">
-        <div
-            class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center text-sm text-gray-400">
-            <p>&copy; 2025 Shopping-App. Todos os direitos reservados.</p>
-            <div class="flex gap-6 mt-2 sm:mt-0">
-                <a id="open-privacy-btn" class="hover:text-blue-400 transition cursor-pointer">Privacidade</a>
-                <a id="open-terms-btn" class="hover:text-blue-400 transition cursor-pointer">Termos</a>
-                <a id="open-contact-btn" class="hover:text-blue-400 transition cursor-pointer">Contato</a>
-            </div>
-        </div>
-    </footer>
+	<footer class="bg-black bg-opacity-50 backdrop-blur-md py-4">
+		<div
+			class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center text-sm text-gray-400">
+			<p>&copy; 2025 Shopping-App. Todos os direitos reservados.</p>
+			<div class="flex gap-6 mt-2 sm:mt-0">
+				<a id="open-privacy-btn" class="hover:text-blue-400 transition cursor-pointer">Privacidade</a>
+				<a id="open-terms-btn" class="hover:text-blue-400 transition cursor-pointer">Termos</a>
+				<a id="open-contact-btn" class="hover:text-blue-400 transition cursor-pointer">Contato</a>
+			</div>
+		</div>
+	</footer>
 
 	<!-- Modal de Edição de Produto -->
 	<div id="modal-edicao" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
@@ -239,7 +239,7 @@
 	{% include "partials/modals.html" %}
 
 	<!-- Scripts -->
-	<script src="/static/script.js" defer></script>	
+	<script src="/static/script.js" defer></script>
 	<script src="/static/editProductModalScript.js" defer></script>
 	<script src="/static/toggleDropdowns.js" defer></script>
 	<script src="/static/modals.js" defer></script>

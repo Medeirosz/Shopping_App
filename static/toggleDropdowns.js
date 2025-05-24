@@ -1,4 +1,3 @@
-// static/js/toggleDropdowns.js
 document.addEventListener("DOMContentLoaded", () => {
   const dropdowns = [
     { btnId: "profile-button", menuId: "profile-dropdown" },
@@ -16,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Fecha tudo ao clicar fora
+  // Fechar tudo ao clicar fora
   document.addEventListener("click", e => {
     if (!e.target.closest(".dropdown-container")) {
       dropdowns.forEach(({ menuId }) => {

@@ -1,19 +1,26 @@
 {# templates/partials/cart_dropdown.html #}
 {% if carrinho %}
-  <ul class="space-y-2 text-white">
-    {% for item in carrinho %}
-      <li class="flex justify-between">
-        <span>{{ item.nome }}:</span>
-        <span>R$ {{ "%.2f"|format(item.preco) }}</span>
-        <button data-cart-remove="{{ item.id }}"
-                class="text-red-500 hover:text-red-700 text-sm ml-2">×</button>
-      </li>
-    {% endfor %}
-  </ul>
-  <button data-cart-clear
-          class="mt-4 w-full bg-red-600 hover:bg-red-700 py-2 rounded text-white font-semibold">
-    Esvaziar carrinho
-  </button>
+<ul class="space-y-2 text-white">
+    <ul class="divide-y divide-gray-700 text-gray-100">
+        {% for item in carrinho %}
+        <li id="cart-item-{{item.id}}" class="py-2 flex justify-between items-center">
+            <div>
+                <span class="font-medium">{{ item.nome }}:</span>
+                <span class="ml-2">R$ {{ "%.2f"|format(item.preco) }}</span>
+            </div>
+            <form class="bg-red-500/50 rounded" action="/carrinho/remover/{{ item.id }}" method="post" style="display:inline">
+                <button type="submit">Remover</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</ul>
+
+<form action="/carrinho/limpar" method="post">
+    <button type="submit"
+        class="mt-4 bg-red-600 hover:bg-red-700 px-4 w-full py-2 rounded text-white font-semibold">Esvaziar
+        carrinho</button>
+</form>
 {% else %}
-  <p class="text-white">Seu carrinho está vazio.</p>
+<p class="text-white">Seu carrinho está vazio.</p>
 {% endif %}

@@ -176,20 +176,18 @@ def clear_cart(request: Request, db: Session = Depends(get_db)):
 
 
 @app.post("/carrinho/remover/{item_id}")
-def remover_item_carrinho(
-    request: Request,
-    item_id: int,
-    db: Session = Depends(get_db)
-):
+def remover_item_carrinho(request: Request, item_id: int, db: Session = Depends(get_db)):
     user_id = get_current_user(request)
     item = db.query(CartItem).filter(
         CartItem.id == item_id,
         CartItem.user_id == user_id
     ).first()
-    if item:
-        db.delete(item)
-        db.commit()
-    return JSONResponse({"ok": True})
+    if not item:
+        return JSONResponse({"success": False}, status_code=404)
+
+    db.delete(item)
+    db.commit()
+    return JSONResponse({"success": True, "item_id": item_id})
 
 
 @app.post("/produtos/{produto_id}/editar", dependencies=[Depends(admin_required)])
