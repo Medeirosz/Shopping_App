@@ -82,40 +82,17 @@
         {% endif %}
 
         <!-- Carrinho -->
-        <li>
-          <div class="dropdown-container relative inline-block text-left">
-            <button id="carrinho-button" class="text-blue-400 hover:text-blue-600 font-semibold">
-              <img src="/static/logo.png" alt="Carrinho"
-                class="hover:text-blue-400 h-7 w-auto filter invert brightness-200 transition duration-300 group-hover:invert-0 group-hover:brightness-100" />
-            </button>
-            <div id="carrinho-dropdown"
-              class="hidden fixed right-0 mt-[1.75rem] w-72 bg-white/10 backdrop-blur-md p-4 rounded-xl shadow z-50">
-
-              {% if carrinho %}
-              <ul class="space-y-2 text-white">
-                {% for item in carrinho %}
-                <li class="flex justify-between">
-                  <span>{{ item.nome }}:</span>
-                  <span>R$ {{ "%.2f"|format(item.preco) }}</span>
-                  <form method="post" action="/carrinho/remover/{{ item.id }}">
-                    <button type="submit" class="text-red-500 hover:text-red-700 text-sm ml-2">Remover</button>
-                  </form>
-                </li>
-                {% endfor %}
-              </ul>
-              <form method="post" action="/carrinho/limpar">
-                <button class="mt-4 w-full bg-red-600 hover:bg-red-700 py-2 rounded text-white font-semibold">Esvaziar
-                  carrinho</button>
-              </form>
-              {% else %}
-              <p class="text-white">Seu carrinho está vazio.</p>
-              {% endif %}
-
-            </div>
-          </div>
-        </li>
+				<li class="dropdown-container relative inline-block">
+					<button id="carrinho-button" class="text-blue-400 hover:text-blue-600 font-semibold">
+						<img src="/static/logo.png" alt="Carrinho"
+							class="h-7 w-auto filter invert brightness-200 transition duration-300" />
+					</button>
+					<div id="carrinho-dropdown"
+						class="hidden fixed right-0 mt-[1.75rem] w-72 bg-white/10 backdrop-blur-md p-4 rounded-xl shadow z-50 max-h-[60vh] overflow-y-auto">
+						{% include "partials/cart_dropdown.html" %}
+					</div>
+				</li>
       </ul>
-
     </nav>
   </header>
 
