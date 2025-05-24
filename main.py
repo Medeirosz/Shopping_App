@@ -1,6 +1,6 @@
 from database import Base, engine, SessionLocal
 from fastapi import FastAPI, Request, Form, Depends, Path, HTTPException, status
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -164,7 +164,7 @@ def add_to_cart(
         item = CartItem(user_id=user_id, nome=produto.nome, preco=produto.preco)
         db.add(item)
         db.commit()
-    return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)
+    return JSONResponse({"ok": True})
 
 
 @app.post("/carrinho/limpar")
@@ -172,7 +172,7 @@ def clear_cart(request: Request, db: Session = Depends(get_db)):
     user_id = get_current_user(request)
     db.query(CartItem).filter(CartItem.user_id == user_id).delete()
     db.commit()
-    return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)
+    return JSONResponse({"ok": True})
 
 
 @app.post("/carrinho/remover/{item_id}")
@@ -189,7 +189,7 @@ def remover_item_carrinho(
     if item:
         db.delete(item)
         db.commit()
-    return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)
+    return JSONResponse({"ok": True})
 
 
 @app.post("/produtos/{produto_id}/editar", dependencies=[Depends(admin_required)])
@@ -205,3 +205,12 @@ def editar_produto(
         produto.preco = preco
         db.commit()
     return RedirectResponse(url="/", status_code=HTTP_303_SEE_OTHER)
+
+@app.get("/carrinho/partial", response_class=HTMLResponse)
+def cart_partial(request: Request, db: Session = Depends(get_db)):
+    user_id = request.session.get("user_id")
+    carrinho = db.query(CartItem).filter(CartItem.user_id == user_id).all()
+    return templates.TemplateResponse(
+        "partials/cart_dropdown.html",
+        {"request": request, "carrinho": carrinho}
+    )
